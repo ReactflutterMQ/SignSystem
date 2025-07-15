@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import store from '@/store';
+import type { StateAll } from '@/store';
+import { ElMessage } from 'element-plus';
 
 const Login = () => import('@/views/Login/Login.vue')
 const Home = () => import('@/views/Home/Home.vue')
@@ -88,6 +91,24 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {//配置全局路由守卫
+  const token = (store.state as StateAll).users.token
+  if (to.meta.auth) {//如果有权限
+    if (token) {
+      next()//有token放行
+    } else {
+      next('/login')//没token跳转登录页
+      ElMessage.warning('未登录或登陆过期，请重新登录')
+    }
+  } else {//如果没权限
+    if (token && to.path === '/login') {
+      next('/')//有token并且想跳转登录页，让其重新回到首页
+    } else {
+      next()
+    }
+  }
 })
 
 export default router

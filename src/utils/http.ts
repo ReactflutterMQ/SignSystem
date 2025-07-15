@@ -1,5 +1,7 @@
 import axios from "axios";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import store from "@/store";
+import type { StateAll } from "@/store";
 
 // dev/
 // http://api.h5ke.top/
@@ -11,6 +13,9 @@ const instance = axios.create({
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
+    if (config.headers) {
+        config.headers["Authorization"] = (store.state as StateAll).users.token;
+    }
     return config;
 }, function (error) {
     return Promise.reject(error);
