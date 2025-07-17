@@ -25,6 +25,9 @@ const mutations: MutationTree<UsersState> = {
     },
     updateInfos(state, payload) {
         state.infos = payload
+    },
+    clearInfos(state) {
+        state.infos = {}
     }
 }
 const actions: ActionTree<UsersState, State> = {

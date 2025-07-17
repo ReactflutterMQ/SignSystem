@@ -24,6 +24,8 @@ import HomeHeader from './components/HomeHeader.vue'
 import HomeAside from './components/HomeAside.vue'
 import HomeBreadcrumb from './components/Breadcrumb.vue'
 import HomeMain from './components/HomeMain.vue'
+
+
 </script>
 
 <style lang="scss" scoped>

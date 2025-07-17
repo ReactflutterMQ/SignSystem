@@ -23,7 +23,7 @@ export interface StateAll extends State {
 
 const vuexLocal = new VuexPersistence<State>({
   storage: window.localStorage,
-  reducer: (state) => ({ users: { token: (state as StateAll).users.token } }) // 只持久化token
+  reducer: (state) => ({ users: { token: (state as StateAll).users.token } }) // 持久化token
 })
 
 export const key: InjectionKey<Store<StateAll>> = Symbol()

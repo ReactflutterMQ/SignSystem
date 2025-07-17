@@ -33,7 +33,6 @@
         v-model="dialogVisible"
         title="提示"
         width="500"
-        :before-close="handleClose"
     >
         <span>确认退出系统吗？</span>
         <template #footer>
@@ -58,22 +57,12 @@ const store = useStore()
 const router = useRouter()
 const dialogVisible = ref(false)
 
-const handleClose = (done: () => void) => {
-  ElMessageBox.confirm('Are you sure to close this dialog?')
-    .then(() => {
-      done()
-    })
-    .catch(() => {
-      // catch error
-    })
-}
-
 const logOut = () => {
     dialogVisible.value = false
     ElMessage.success('退出成功')
     setTimeout(() => {
         router.push('/login')
-        store.commit('clearToken')
+        store.commit('clearToken', 'clearInfos')
     }, 1000);
 }
 </script>

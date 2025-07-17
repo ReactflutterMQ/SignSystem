@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import _ from 'lodash'
 import store from '@/store';
 import type { StateAll } from '@/store';
-import { ElMessage } from 'element-plus';
+// import { ElMessage } from 'element-plus';
 
 const Login = () => import('@/views/Login/Login.vue')
 const Home = () => import('@/views/Home/Home.vue')
@@ -95,12 +96,18 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {//配置全局路由守卫
   const token = (store.state as StateAll).users.token
-  if (to.meta.auth) {//如果有权限
+  const infos = (store.state as StateAll).users.infos
+  if (to.meta.auth && _.isEmpty(infos)) {//如果需要权限有权限
     if (token) {
-      next()//有token放行
+      store.dispatch('infos').then(res => {
+        if (res.data.errcode === 0) {
+          store.commit('updateInfos', res.data.infos)
+          next()//获取到用户信息后放行
+        }
+      });
     } else {
       next('/login')//没token跳转登录页
-      ElMessage.warning('未登录或登陆过期，请重新登录')
+      // ElMessage.warning('未登录或登陆过期，请重新登录')
     }
   } else {//如果没权限
     if (token && to.path === '/login') {

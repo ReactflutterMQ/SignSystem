@@ -2,6 +2,7 @@ import axios from "axios";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import store from "@/store";
 import type { StateAll } from "@/store";
+import { ElMessage } from "element-plus";
 
 // dev/
 // http://api.h5ke.top/
@@ -24,7 +25,15 @@ instance.interceptors.request.use(function (config) {
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
     // 对响应数据做点什么
-    return response.data;
+    if (response.data.errmsg === 'token error') {
+        ElMessage.error('token error');
+        store.commit('clearToken')
+        setTimeout(() => {
+            window.location.replace('/login')
+        }, 1000);
+    }
+
+    return response;
 }, function (error) {
     return Promise.reject(error);
 });
