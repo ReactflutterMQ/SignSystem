@@ -57,7 +57,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'apply',
-        name: 'Apply',
+        name: 'apply',
         component: Apply,
         meta: {
           menu: true,
@@ -68,7 +68,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'check',
-        name: 'Check',
+        name: 'check',
         component: Check,
         meta: {
           menu: true,
