@@ -12,7 +12,7 @@ const actions: ActionTree<ChecksState, State> = {}
 const getters: GetterTree<ChecksState, State> = {}
 
 export default {
-    namespace: true,
+    namespaced: true, // 开启命名空间
     state,
     mutations,
     actions,

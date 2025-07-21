@@ -27,7 +27,7 @@ instance.interceptors.response.use(function (response) {
     // 对响应数据做点什么
     if (response.data.errmsg === 'token error') {
         ElMessage.error('token error');
-        store.commit('clearToken')
+        store.commit('users/clearToken')
         setTimeout(() => {
             window.location.replace('/login')
         }, 1000);

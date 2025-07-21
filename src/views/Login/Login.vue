@@ -83,10 +83,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-        store.dispatch('login', ruleForm).then((res) => {
-            console.log('res', res);
+        store.dispatch('users/login', ruleForm).then((res) => {
             if (res.data.errcode === 0) {// 登录成功
-                store.commit('updateToken', res.data.token)
+                store.commit('users/updateToken', res.data.token)
                 ElMessage.success('登录成功')
                 router.push('/');
             } else {

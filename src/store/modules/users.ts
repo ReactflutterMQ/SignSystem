@@ -41,7 +41,7 @@ const actions: ActionTree<UsersState, State> = {
 const getters: GetterTree<UsersState, State> = {}
 
 export default {
-    namespace: true,
+    namespaced: true, // 开启命名空间
     state,
     mutations,
     actions,
