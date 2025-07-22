@@ -7,7 +7,7 @@ import { ElMessage } from "element-plus";
 // dev/
 // http://api.h5ke.top/
 const instance = axios.create({
-    baseURL: 'dev/',
+    baseURL: '/dev',
     timeout: 5000
 });
 

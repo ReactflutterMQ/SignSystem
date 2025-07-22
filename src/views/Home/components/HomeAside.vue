@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="route.fullPath" class="el-menu-vertical-demo" router>
+  <el-menu :default-active="route.path" class="el-menu-vertical-demo" router>
     <el-sub-menu v-for="menu in menus" :key="menu.path" :index="menu.path">
       <template #title>
         <el-icon>
@@ -39,10 +39,6 @@ const menus = _.cloneDeep(router.options.routes).filter(v => {
     (permission as (RouteRecordName | undefined)[]).includes(v.name)
   );
 });
-
-// console.log('route', route);
-// console.log('store', store.state);
-// console.log('menus', menus);
 </script>
 
 <style lang="scss" scoped>

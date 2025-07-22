@@ -148,7 +148,12 @@ const handleChange = (e: number) => {
 };
 
 const handleToException = () => {
-  router.push('/exception');
+  router.push({
+    path: '/exception',
+    query: {
+      month: month.value
+    }
+  })
 };
 
 // 在线签到
