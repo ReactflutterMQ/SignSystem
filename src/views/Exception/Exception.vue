@@ -90,7 +90,6 @@ const date = new Date();
 const year = date.getFullYear();
 const month = ref(Number(route.query.month) || date.getMonth() + 1);
 const signsInfos = computed(() => store.state.signs.infos);
-console.log('signsInfos.value', signsInfos.value);
 
 const ret = ((signsInfos.value.detail as { [index: string]: unknown })[
   toZero(month.value)

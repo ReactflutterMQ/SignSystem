@@ -65,7 +65,7 @@ const logOut = () => {
     ElMessage.success('退出成功')
     setTimeout(() => {
         window.location.replace('/login')
-        store.commit('clearToken', 'clearInfos')
+        store.commit('users/clearToken')
     }, 1000);
 }
 </script>

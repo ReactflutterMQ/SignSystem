@@ -3,13 +3,17 @@
     <el-sub-menu v-for="menu in menus" :key="menu.path" :index="menu.path">
       <template #title>
         <el-icon>
-            <component :is="menu.meta?.icon"></component>
+          <component :is="menu.meta?.icon"></component>
         </el-icon>
         <span>{{ menu.meta?.title }}</span>
       </template>
-      <el-menu-item v-for="menuChild in menu.children" :key="menuChild.path" :index="menu.path + menuChild.path">
+      <el-menu-item
+        v-for="menuChild in menu.children"
+        :key="menuChild.path"
+        :index="menu.path + menuChild.path"
+      >
         <el-icon>
-            <component :is="menuChild.meta?.icon"></component>
+          <component :is="menuChild.meta?.icon"></component>
         </el-icon>
         <span>{{ menuChild.meta?.title }}</span>
       </el-menu-item>

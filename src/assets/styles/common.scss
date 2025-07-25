@@ -1,9 +1,9 @@
 .el-tooltip__trigger:focus-visible {
-    outline: unset;
-} 
- 
+  outline: unset;
+}
+
 /*或者是下面这个*/
- 
- .el-tooltip__trigger:first-child:focus-visible {
-    outline: unset;
-} 
+
+.el-tooltip__trigger:first-child:focus-visible {
+  outline: unset;
+}

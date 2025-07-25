@@ -151,9 +151,9 @@ const handleToException = () => {
   router.push({
     path: '/exception',
     query: {
-      month: month.value
-    }
-  })
+      month: month.value,
+    },
+  });
 };
 
 // 在线签到
