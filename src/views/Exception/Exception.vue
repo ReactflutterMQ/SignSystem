@@ -33,42 +33,15 @@
       </el-timeline>
     </el-col>
     <el-col :span="12">
-      <el-empty v-if="false" description="description" />
+      <el-empty v-if="applyListMonth.length === 0" description="description" />
       <el-timeline v-else>
-        <el-timeline-item timestamp="2023-01-01" placement="top">
+        <el-timeline-item v-for="item in applyListMonth" :key="(item._id as string)" :timestamp="(item.reason as string)" placement="top">
           <el-card>
-            <h4>待审批</h4>
+            <h4>{{ item.state }}</h4>
             <p class="exception-info">
-              申请日期 2025-07-18 12:00:00 - 2025-08-28 12:00:00
+              申请日期 {{ (item.time as string[])[0] }} - {{ (item.time as string[])[1] }}
             </p>
-            <p class="exception-info">申请详情 3fsdf</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2023-01-01" placement="top">
-          <el-card>
-            <h4>待审批</h4>
-            <p class="exception-info">
-              申请日期 2025-07-18 12:00:00 - 2025-08-28 12:00:00
-            </p>
-            <p class="exception-info">申请详情 3fsdf</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2023-01-01" placement="top">
-          <el-card>
-            <h4>待审批</h4>
-            <p class="exception-info">
-              申请日期 2025-07-18 12:00:00 - 2025-08-28 12:00:00
-            </p>
-            <p class="exception-info">申请详情 3fsdf</p>
-          </el-card>
-        </el-timeline-item>
-        <el-timeline-item timestamp="2023-01-01" placement="top">
-          <el-card>
-            <h4>待审批</h4>
-            <p class="exception-info">
-              申请日期 2025-07-18 12:00:00 - 2025-08-28 12:00:00
-            </p>
-            <p class="exception-info">申请详情 3fsdf</p>
+            <p class="exception-info">申请详情 {{ item.note }}</p>
           </el-card>
         </el-timeline-item>
       </el-timeline>
@@ -90,6 +63,13 @@ const date = new Date();
 const year = date.getFullYear();
 const month = ref(Number(route.query.month) || date.getMonth() + 1);
 const signsInfos = computed(() => store.state.signs.infos);
+const applyListMonth = computed(() => store.state.checks.applyList.filter(v => {
+  const startTime = (v.time as string[])[0].split(' ')[0].split('-')[1];
+  const endTime = (v.time as string[])[1].split(' ')[0].split('-')[1];
+  return month.value >= Number(startTime) && month.value <= Number(endTime);
+}))
+
+console.log(applyListMonth.value);
 
 const ret = ((signsInfos.value.detail as { [index: string]: unknown })[
   toZero(month.value)

@@ -48,12 +48,14 @@ const routes: Array<RouteRecordRaw> = [
           const signsInfos = (store.state as StateAll).signs.infos;
 
           if (_.isEmpty(signsInfos)) {
-            store.dispatch('signs/getTime', { userid: usersInfos._id }).then(res => {
-              if (res.data.errcode===0) {
-                store.commit('signs/updateInfos', res.data.infos);
-                next();
-              }
-            });
+            store
+              .dispatch('signs/getTime', { userid: usersInfos._id })
+              .then(res => {
+                if (res.data.errcode === 0) {
+                  store.commit('signs/updateInfos', res.data.infos);
+                  next();
+                }
+              });
           } else {
             next();
           }
@@ -69,20 +71,33 @@ const routes: Array<RouteRecordRaw> = [
           icon: 'warning',
           auth: true,
         },
-        beforeEnter: (to, from, next) => {
+        beforeEnter: async (to, from, next) => {
           const usersInfos = (store.state as StateAll).users.infos;
           const signsInfos = (store.state as StateAll).signs.infos;
+          const applyList = (store.state as StateAll).checks.applyList;
           if (_.isEmpty(signsInfos)) {
-            store.dispatch('signs/getTime', { userid: usersInfos._id }).then(res => {
-              if (res.data.errcode===0) {
-                store.commit('signs/updateInfos', res.data.infos);
-                next();
-              }
-            })
-          } else {
-            next();
+            const res = await store.dispatch('signs/getTime', {
+              userid: usersInfos._id,
+            });
+            if (res.data.errcode === 0) {
+              store.commit('signs/updateInfos', res.data.infos);
+            } else {
+              return;
+            }
           }
-        }
+
+          if (_.isEmpty(applyList)) {
+            const res = await store.dispatch('checks/getApply', {
+              applicantid: usersInfos._id,
+            });
+            if (res.data.errcode === 0) {
+              store.commit('checks/updateApplyList', res.data.rets);
+            } else {
+              return;
+            }
+          }
+          next();
+        },
       },
       {
         path: 'apply',
@@ -98,16 +113,18 @@ const routes: Array<RouteRecordRaw> = [
           const usersInfos = (store.state as StateAll).users.infos;
           const applyList = (store.state as StateAll).checks.applyList;
           if (_.isEmpty(applyList)) {
-            store.dispatch('checks/getApply', { applicantid: usersInfos._id }).then(res => {
-              if (res.data.errcode===0) {
-                store.commit('checks/updateApplyList', res.data.rets);
-                next();
-              }
-            })
+            store
+              .dispatch('checks/getApply', { applicantid: usersInfos._id })
+              .then(res => {
+                if (res.data.errcode === 0) {
+                  store.commit('checks/updateApplyList', res.data.rets);
+                  next();
+                }
+              });
           } else {
             next();
           }
-        }
+        },
       },
       {
         path: 'check',
@@ -118,6 +135,22 @@ const routes: Array<RouteRecordRaw> = [
           title: '我的考勤审批',
           icon: 'finished',
           auth: true,
+        },
+        beforeEnter: (to, from, next) => {
+          const usersInfos = (store.state as StateAll).users.infos;
+          const checksApplyList = (store.state as StateAll).checks.checkList;
+          if (_.isEmpty(checksApplyList)) {
+            store
+              .dispatch('checks/getApply', { approverid: usersInfos._id })
+              .then(res => {
+                if (res.data.errcode === 0) {
+                  store.commit('checks/updateCheckList', res.data.rets);
+                  next();
+                }
+              });
+          } else {
+            next();
+          }
         },
       },
     ],

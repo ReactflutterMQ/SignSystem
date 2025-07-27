@@ -15,7 +15,7 @@
   </div>
 
   <div class="apply-table">
-    <el-table :data="pageApplyList" border style="width: 100%">
+    <el-table :data="pageApplyList" border>
       <el-table-column prop="applicantname" label="申请人" width="180" />
       <el-table-column prop="reason" label="审批事由" width="180" />
       <el-table-column prop="time" label="时间">
@@ -145,7 +145,7 @@ const validatorTime = (
   value: [DateModelType, DateModelType],
   callback: (arg?: Error) => void,
 ) => {
-  if (!value[0] || !value[1]) {
+  if (!value[0] && !value[1]) {
     callback(new Error('请选择审批时间'));
   } else {
     callback();
@@ -155,7 +155,7 @@ const rules = reactive<FormRules>({
   approvername: [{ required: true, message: '请选择审批人', trigger: 'blur' }],
   reason: [{ required: true, message: '请选择审批事由', trigger: 'blur' }],
   time: [{ validator: validatorTime, trigger: 'blur' }],
-  note: [{ required: true, message: '请输入备注', trigger: 'blur' }],
+  note: [{ required: true, message: '请添加审批备注', trigger: 'blur' }],
 });
 
 const usersInfo = computed(() => store.state.users.infos);
@@ -207,11 +207,13 @@ const submitForm = (formEl: FormInstance | undefined) => {
       console.log(ruleForm);
       store.dispatch('checks/postApply', ruleForm).then(res => {
         if (res.data.errcode === 0) {
-          store.dispatch('checks/getApply', { applicantid: usersInfo.value._id }).then(res => {
-              if (res.data.errcode===0) {
+          store
+            .dispatch('checks/getApply', { applicantid: usersInfo.value._id })
+            .then(res => {
+              if (res.data.errcode === 0) {
                 store.commit('checks/updateApplyList', res.data.rets);
               }
-            })
+            });
           ElMessage.success('添加审批成功');
           resetForm(ruleFormRef.value);
           handleClose();
