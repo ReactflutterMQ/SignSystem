@@ -43,22 +43,34 @@ const routes: Array<RouteRecordRaw> = [
           icon: 'calendar',
           auth: true,
         },
-        beforeEnter: (to, from, next) => {
+        beforeEnter: async (to, from, next) => {
           const usersInfos = (store.state as StateAll).users.infos;
           const signsInfos = (store.state as StateAll).signs.infos;
+          const newsInfos = (store.state as StateAll).news.info;
 
           if (_.isEmpty(signsInfos)) {
-            store
-              .dispatch('signs/getTime', { userid: usersInfos._id })
-              .then(res => {
-                if (res.data.errcode === 0) {
-                  store.commit('signs/updateInfos', res.data.infos);
-                  next();
-                }
-              });
-          } else {
-            next();
+            const res = await store.dispatch('signs/getTime', {
+              userid: usersInfos._id,
+            });
+            if (res.data.errcode === 0) {
+              store.commit('signs/updateInfos', res.data.infos);
+            } else {
+              return;
+            }
           }
+
+          if (_.isEmpty(newsInfos)) {
+            const res = await store.dispatch('news/getRemind', {
+              userid: usersInfos._id,
+            });
+            if (res.data.errcode === 0) {
+              store.commit('news/updateInfo', res.data.info);
+            } else {
+              return;
+            }
+          }
+
+          next();
         },
       },
       {
@@ -75,6 +87,7 @@ const routes: Array<RouteRecordRaw> = [
           const usersInfos = (store.state as StateAll).users.infos;
           const signsInfos = (store.state as StateAll).signs.infos;
           const applyList = (store.state as StateAll).checks.applyList;
+          const newsInfos = (store.state as StateAll).news.info;
           if (_.isEmpty(signsInfos)) {
             const res = await store.dispatch('signs/getTime', {
               userid: usersInfos._id,
@@ -92,6 +105,17 @@ const routes: Array<RouteRecordRaw> = [
             });
             if (res.data.errcode === 0) {
               store.commit('checks/updateApplyList', res.data.rets);
+            } else {
+              return;
+            }
+          }
+
+          if (_.isEmpty(newsInfos)) {
+            const res = await store.dispatch('news/getRemind', {
+              userid: usersInfos._id,
+            });
+            if (res.data.errcode === 0) {
+              store.commit('news/updateInfo', res.data.info);
             } else {
               return;
             }
