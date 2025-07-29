@@ -26,14 +26,14 @@
       <el-table-column prop="approvername" label="操作" width="180">
         <template #default="scope">
           <el-button
-            @click="handlePutApply(scope.row._id, '已通过')"
+            @click="handlePutApply(scope.row._id, '已通过', scope.row.applicantid)"
             type="success"
             icon="Check"
             size="small"
             circle
           />
           <el-button
-            @click="handlePutApply(scope.row._id, '未通过')"
+            @click="handlePutApply(scope.row._id, '未通过', scope.row.applicantid)"
             type="danger"
             icon="Close"
             size="small"
@@ -58,7 +58,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useStore } from '@/store';
-import { StateAll } from '@/store';
 import { ElMessage } from 'element-plus';
 
 const defaultType = '全部';
@@ -84,7 +83,7 @@ const pageCheckList = computed(() =>
   ),
 );
 
-const handlePutApply = (_id: string, state: '未通过' | '已通过'): void => {
+const handlePutApply = (_id: string, state: '未通过' | '已通过', applicantid: string): void => {
   store.dispatch('checks/putApply', { _id, state }).then(res => {
     if (res.data.errcode === 0) {
       store
@@ -94,6 +93,7 @@ const handlePutApply = (_id: string, state: '未通过' | '已通过'): void => 
             store.commit('checks/updateCheckList', res.data.rets);
           }
         });
+      store.dispatch('news/putRemind', { userid: applicantid, applicant: true })
       ElMessage.success('审批成功');
     }
   });

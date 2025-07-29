@@ -12,10 +12,16 @@
       </el-badge>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item v-if="newsInfos.applicant" @click="handleNavigate('/apply')">
+          <el-dropdown-item
+            v-if="newsInfos.applicant"
+            @click="handleNavigate('/apply')"
+          >
             有审批结果消息
           </el-dropdown-item>
-          <el-dropdown-item v-if="newsInfos.approver" @click="handleNavigate('/check')">
+          <el-dropdown-item
+            v-if="newsInfos.approver"
+            @click="handleNavigate('/check')"
+          >
             有审批请求消息
           </el-dropdown-item>
           <el-dropdown-item v-if="!newsInfos.applicant && !newsInfos.approver">
@@ -53,7 +59,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { useStore } from '@/store';
 import { useRouter } from 'vue-router';
 
@@ -71,7 +77,7 @@ const isDot = computed(
 
 const handleNavigate = (path: string) => {
   router.push(path);
-}
+};
 
 const logOut = () => {
   dialogVisible.value = false;
