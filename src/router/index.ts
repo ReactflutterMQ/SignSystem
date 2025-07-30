@@ -10,6 +10,9 @@ const Sign = () => import('@/views/Sign/Sign.vue');
 const Exception = () => import('@/views/Exception/Exception.vue');
 const Apply = () => import('@/views/Apply/Apply.vue');
 const Check = () => import('@/views/Check/Check.vue');
+const NotAuth = () => import('@/views/NotAuth/NotAuth.vue')
+const NotFound = () => import('@/views/NotFound/NotFound.vue');
+const NotServer = () => import('@/views/NotServer/NotServer.vue');
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -214,6 +217,25 @@ const routes: Array<RouteRecordRaw> = [
     // which is lazy-loaded when the route is visited.
     component: Login,
   },
+  {
+    path: '/403',
+    name: 'notAuth',
+    component: NotAuth
+  },
+  {
+    path: '/404',
+    name: 'notFound',
+    component: NotFound
+  },
+  {
+    path: '/500',
+    name: 'notServer',
+    component: NotServer
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/404'
+  }
 ];
 
 const router = createRouter({
@@ -231,7 +253,11 @@ router.beforeEach((to, from, next) => {
       store.dispatch('users/infos').then(res => {
         if (res.data.errcode === 0) {
           store.commit('users/updateInfos', res.data.infos);
-          next(); //获取到用户信息后放行
+          if (res.data.infos.permission.includes(to.name)) {
+            next();//获取到用户信息后放行
+          } else {
+            next('/403');
+          }
         }
       });
     } else {

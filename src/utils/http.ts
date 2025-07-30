@@ -3,6 +3,7 @@ import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import store from "@/store";
 import type { StateAll } from "@/store";
 import { ElMessage } from "element-plus";
+import router from "@/router";
 
 // dev/
 // http://api.h5ke.top/
@@ -31,6 +32,8 @@ instance.interceptors.response.use(function (response) {
         setTimeout(() => {
             window.location.replace('/login')
         }, 1000);
+    } else if (response.data.errmsg === 'error') {
+        router.push('/500')
     }
 
     return response;
